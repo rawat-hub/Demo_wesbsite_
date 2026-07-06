@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 el.style.transform = 'none';
             }
         });
+        // Fallback: if GSAP never loaded, remove has-js so content stays visible
+        document.documentElement.classList.remove('has-js');
         setTimeout(() => {
             loader.style.display = 'none';
         }, 800);
@@ -38,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
             el.style.opacity = '1';
             el.style.transform = 'none';
         });
+        document.documentElement.classList.remove('has-js');
     }, 5000);
 
 
@@ -654,24 +657,25 @@ document.addEventListener('DOMContentLoaded', () => {
     /* ==========================================
        INTERSECTION OBSERVER FOR FADE-IN FALLBACK
        ========================================== */
-    // This serves as a non-GSAP fallback for browsers without full GSAP support
-    const observerFallback = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                // Clear any transform that GSAP or CSS might have applied
-                entry.target.style.transform = 'none';
-                observerFallback.unobserve(entry.target);
+    // IntersectionObserver fallback — only when GSAP is unavailable
+    // If GSAP is loaded, it handles all animation; no need for a competing observer
+    if (typeof gsap === 'undefined') {
+        const observerFallback = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'none';
+                    observerFallback.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('[data-anim]').forEach(el => {
+            if (getComputedStyle(el).opacity === '0') {
+                observerFallback.observe(el);
             }
         });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('[data-anim]').forEach(el => {
-        // Only observe if GSAP hasn't already handled it
-        if (getComputedStyle(el).opacity === '0') {
-            observerFallback.observe(el);
-        }
-    });
+    }
 
 
     /* ==========================================
