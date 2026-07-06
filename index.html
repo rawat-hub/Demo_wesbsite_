@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VELURA — Premium Clothing Brand | Timeless Fashion & Modern Design</title>
+    <meta name="description" content="VELURA is a premium clothing brand offering timeless fashion pieces crafted from the finest materials. Italian Merino Wool, Mulberry Silk, and more — discover your signature style.">
+    <link rel="stylesheet" href="assets/style.css">
+    <!-- GSAP for smooth animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- ========== DEMO BANNER ========== -->
+    <div id="demoBanner">
+        <div class="demo-banner-content">
+            <span class="demo-banner-icon"><i class="fas fa-info-circle"></i></span>
+            <span class="demo-banner-text"><strong>VELURA — Demo Showcase:</strong> This website demonstrates premium web development and design capabilities. All imagery is sourced from Unsplash or AI-generated for demonstration purposes.</span>
+            <button class="demo-banner-close" id="demoBannerClose" aria-label="Dismiss"><i class="fas fa-times"></i></button>
+        </div>
+    </div>
+
+    <!-- ========== LOADING SCREEN ========== -->
+    <div id="loader">
+        <div class="loader-content">
+            <div class="loader-logo">VELURA</div>
+            <div class="loader-bar"><span></span></div>
+        </div>
+    </div>
+
+    <!-- ========== NAVIGATION ========== -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">VELURA</a>
+            <div class="nav-links" id="navLinks">
+                <a href="#hero" class="active">Home</a>
+                <a href="#collections">Collections</a>
+                <a href="#products">New Arrivals</a>
+                <a href="#quality">Why VELURA</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="nav-actions">
+                <button class="nav-icon search-trigger" aria-label="Search"><i class="fas fa-search"></i></button>
+                <button class="nav-icon" aria-label="Cart"><i class="fas fa-shopping-bag"></i><span class="cart-count">0</span></button>
+                <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ========== HERO SECTION ========== -->
+    <section id="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-bg"></div>
+        <div class="hero-image-bg"></div>
+        <div class="hero-particles" id="heroParticles"></div>
+        <div class="hero-content">
+            <p class="hero-subtitle" data-anim="fade-up">New Season Collection</p>
+            <h1 class="hero-title" data-anim="fade-up">
+                <span class="text-line">Define Your</span>
+                <span class="text-line accent">Style</span>
+            </h1>
+            <p class="hero-desc" data-anim="fade-up">Where timeless elegance meets modern edge. Discover pieces that speak your language.</p>
+            <div class="hero-buttons" data-anim="fade-up">
+                <a href="#collections" class="btn btn-primary">Explore Collection <i class="fas fa-arrow-right"></i></a>
+                <a href="#about" class="btn btn-outline">Our Story</a>
+            </div>
+            <div class="hero-stats" data-anim="fade-up">
+                <div class="stat">
+                    <span class="stat-number" data-count="0">0</span><span class="stat-suffix">K+</span>
+                    <span class="stat-label">Happy Customers</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" data-count="0">0</span><span class="stat-suffix">+</span>
+                    <span class="stat-label">Premium Designs</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" data-count="0">0</span><span class="stat-suffix">+</span>
+                    <span class="stat-label">Years of Craft</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" data-count="0">0</span><span class="stat-suffix">K+</span>
+                    <span class="stat-label">Orders Shipped</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" data-count="0">0</span><span class="stat-suffix">%</span>
+                    <span class="stat-label">Satisfaction Rate</span>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <div class="scroll-arrow"><i class="fas fa-chevron-down"></i></div>
+        </div>
+    </section>
+
+    <!-- ========== COLLECTIONS SECTION ========== -->
+    <section id="collections">
+        <div class="section-header" data-anim="fade-up">
+            <span class="section-tag">Curated</span>
+            <h2 class="section-title">Complete Your Wardrobe</h2>
+            <p class="section-desc">From everyday essentials to statement pieces — build a wardrobe that speaks your language.</p>
+        </div>
+        <div class="collections-grid">
+            <div class="collection-card" data-anim="fade-up">
+                <div class="collection-img">
+                    <img src="https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?w=600&q=80" alt="Outerwear Collection" loading="lazy">
+                    <div class="collection-img-tag"><i class="fas fa-vest"></i> Outerwear</div>
+                    <div class="collection-overlay">
+                        <a href="#products" class="btn btn-small">View Collection</a>
+                    </div>
+                </div>
+                <div class="collection-info">
+                    <h3>Outerwear</h3>
+                    <p>Blazers, jackets & coats to top off any look</p>
+                </div>
+            </div>
+            <div class="collection-card collection-card-lg" data-anim="fade-up">
+                <div class="collection-img">
+                    <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&q=80" alt="Evening Wardrobe" loading="lazy">
+                    <div class="collection-img-tag"><i class="fas fa-tshirt"></i> Evening</div>
+                    <div class="collection-overlay">
+                        <a href="#products" class="btn btn-small">View Collection</a>
+                    </div>
+                </div>
+                <div class="collection-info">
+                    <h3>Evening Luxe</h3>
+                    <p>Redefining red-carpet glamour for your closet</p>
+                </div>
+            </div>
+            <div class="collection-card" data-anim="fade-up">
+                <div class="collection-img">
+                    <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&q=80" alt="Everyday Basics" loading="lazy">
+                    <div class="collection-img-tag"><i class="fas fa-vest"></i> Essentials</div>
+                    <div class="collection-overlay">
+                        <a href="#products" class="btn btn-small">View Collection</a>
+                    </div>
+                </div>
+                <div class="collection-info">
+                    <h3>Essential Basics</h3>
+                    <p>Everyday wardrobe staples, elevated</p>
+                </div>
+            </div>
+            <div class="collection-card" data-anim="fade-up">
+                <div class="collection-img">
+                    <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80" alt="Seasonal Collection" loading="lazy">
+                    <div class="collection-img-tag"><i class="fas fa-calendar-alt"></i> Seasonal</div>
+                    <div class="collection-overlay">
+                        <a href="#products" class="btn btn-small">View Collection</a>
+                    </div>
+                </div>
+                <div class="collection-info">
+                    <h3>Seasonal Drop</h3>
+                    <p>Limited pieces to refresh your wardrobe</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FEATURED PRODUCTS ========== -->
+    <section id="products">
+        <div class="section-header" data-anim="fade-up">
+            <span class="section-tag">Fresh Drops</span>
+            <h2 class="section-title">New Arrivals</h2>
+            <p class="section-desc">The latest additions to our collection — crafted with precision, designed to impress.</p>
+        </div>
+        <div class="products-grid">
+            <div class="product-card" data-anim="fade-up" data-material="Italian Merino Wool (80% Wool, 18% Nylon, 2% Elastane)">
+                <div class="product-img">
+                    <span class="product-badge"></span>
+                    <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400&q=80" alt="Oversized Blazer" loading="lazy">
+                    <div class="product-actions">
+                        <button class="product-btn" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
+                        <button class="product-btn" aria-label="Quick view"><i class="far fa-eye"></i></button>
+                    </div>
+                    <button class="product-add">Quick Add <i class="fas fa-plus"></i></button>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Outerwear</span>
+                    <h3 class="product-name">Oversized Wool Blazer</h3>
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                        <span>(128)</span>
+                    </div>
+                    <span class="product-price">$189.00</span>
+                    <span class="product-material"></span>
+                </div>
+            </div>
+            <div class="product-card" data-anim="fade-up" data-material="Premium French Linen (100% Linen, Stonewashed)">
+                <div class="product-img">
+                    <span class="product-badge"></span>
+                    <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&q=80" alt="Slim Fit Shirt" loading="lazy">
+                    <div class="product-actions">
+                        <button class="product-btn" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
+                        <button class="product-btn" aria-label="Quick view"><i class="far fa-eye"></i></button>
+                    </div>
+                    <button class="product-add">Quick Add <i class="fas fa-plus"></i></button>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Shirts</span>
+                    <h3 class="product-name">Slim Fit Linen Shirt</h3>
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        <span>(256)</span>
+                    </div>
+                    <span class="product-price">$89.00</span>
+                    <span class="product-material"></span>
+                </div>
+            </div>
+            <div class="product-card" data-anim="fade-up" data-material="Australian Superfine Wool (95% Wool, 5% Spandex)">
+                <div class="product-img">
+                    <span class="product-badge"></span>
+                    <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&q=80" alt="Tailored Trousers" loading="lazy">
+                    <div class="product-actions">
+                        <button class="product-btn" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
+                        <button class="product-btn" aria-label="Quick view"><i class="far fa-eye"></i></button>
+                    </div>
+                    <button class="product-add">Quick Add <i class="fas fa-plus"></i></button>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Bottoms</span>
+                    <h3 class="product-name">Tailored Wool Trousers</h3>
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                        <span>(94)</span>
+                    </div>
+                    <span class="product-price">$149.00</span>
+                    <span class="product-material"></span>
+                </div>
+            </div>
+            <div class="product-card" data-anim="fade-up" data-material="Genuine Italian Calf Leather (100% Full-Grain Leather)">
+                <div class="product-img">
+                    <span class="product-badge"></span>
+                    <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400&q=80" alt="Leather Jacket" loading="lazy">
+                    <div class="product-actions">
+                        <button class="product-btn" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
+                        <button class="product-btn" aria-label="Quick view"><i class="far fa-eye"></i></button>
+                    </div>
+                    <button class="product-add">Quick Add <i class="fas fa-plus"></i></button>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Outerwear</span>
+                    <h3 class="product-name">Classic Leather Jacket</h3>
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                        <span>(312)</span>
+                    </div>
+                    <span class="product-price">$299.00</span>
+                    <span class="product-material"></span>
+                </div>
+            </div>
+            <div class="product-card" data-anim="fade-up" data-material="Mongolian Cashmere Blend (70% Cashmere, 30% Silk)">
+                <div class="product-img">
+                    <span class="product-badge"></span>
+                    <img src="https://images.unsplash.com/photo-1554568218-0f1715e72254?w=400&q=80" alt="Cashmere Sweater" loading="lazy">
+                    <div class="product-actions">
+                        <button class="product-btn" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
+                        <button class="product-btn" aria-label="Quick view"><i class="far fa-eye"></i></button>
+                    </div>
+                    <button class="product-add">Quick Add <i class="fas fa-plus"></i></button>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Knitwear</span>
+                    <h3 class="product-name">Cashmere Blend Sweater</h3>
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        <span>(189)</span>
+                    </div>
+                    <span class="product-price">$219.00</span>
+                    <span class="product-material"></span>
+                </div>
+            </div>
+            <div class="product-card" data-anim="fade-up" data-material="Mulberry Silk Charmeuse (100% 22-Momme Silk)">
+                <div class="product-img">
+                    <span class="product-badge"></span>
+                    <img src="https://images.unsplash.com/photo-1564257631407-4deb1f99d992?w=400&q=80" alt="Mini Dress" loading="lazy">
+                    <div class="product-actions">
+                        <button class="product-btn" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
+                        <button class="product-btn" aria-label="Quick view"><i class="far fa-eye"></i></button>
+                    </div>
+                    <button class="product-add">Quick Add <i class="fas fa-plus"></i></button>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Dresses</span>
+                    <h3 class="product-name">Silk Evening Mini Dress</h3>
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                        <span>(67)</span>
+                    </div>
+                    <span class="product-price">$179.00</span>
+                    <span class="product-material"></span>
+                </div>
+            </div>
+            <div class="product-card" data-anim="fade-up" data-material="Organic Cotton Denim (100% GOTS-Certified Organic Cotton)">
+                <div class="product-img">
+                    <span class="product-badge"></span>
+                    <img src="https://images.unsplash.com/photo-1604176354204-9268737828e4?w=400&q=80" alt="Denim Jacket" loading="lazy">
+                    <div class="product-actions">
+                        <button class="product-btn" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
+                        <button class="product-btn" aria-label="Quick view"><i class="far fa-eye"></i></button>
+                    </div>
+                    <button class="product-add">Quick Add <i class="fas fa-plus"></i></button>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Outerwear</span>
+                    <h3 class="product-name">Organic Denim Jacket</h3>
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                        <span>(203)</span>
+                    </div>
+                    <span class="product-price">$159.00</span>
+                    <span class="product-material"></span>
+                </div>
+            </div>
+            <div class="product-card" data-anim="fade-up" data-material="Japanese Selvedge Denim (100% Zimbabwe Cotton, Indigo Dyed)">
+                <div class="product-img">
+                    <span class="product-badge"></span>
+                    <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400&q=80" alt="Selvedge Jeans" loading="lazy">
+                    <div class="product-actions">
+                        <button class="product-btn" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
+                        <button class="product-btn" aria-label="Quick view"><i class="far fa-eye"></i></button>
+                    </div>
+                    <button class="product-add">Quick Add <i class="fas fa-plus"></i></button>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Bottoms</span>
+                    <h3 class="product-name">Selvedge Denim Jeans</h3>
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        <span>(178)</span>
+                    </div>
+                    <span class="product-price">$199.00</span>
+                    <span class="product-material"></span>
+                </div>
+            </div>
+            <div class="product-card" data-anim="fade-up" data-material="Recycled Polyester Blend (75% RPET Recycled Polyester, 20% Organic Cotton, 5% Elastane)">
+                <div class="product-img">
+                    <span class="product-badge"></span>
+                    <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=80" alt="Eco Bomber Jacket" loading="lazy">
+                    <div class="product-actions">
+                        <button class="product-btn" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
+                        <button class="product-btn" aria-label="Quick view"><i class="far fa-eye"></i></button>
+                    </div>
+                    <button class="product-add">Quick Add <i class="fas fa-plus"></i></button>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Outerwear</span>
+                    <h3 class="product-name">Eco Bomber Jacket</h3>
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                        <span>(92)</span>
+                    </div>
+                    <span class="product-price">$229.00</span>
+                    <span class="product-material"></span>
+                </div>
+            </div>
+            <div class="product-card" data-anim="fade-up" data-material="TENCEL™ Lyocell Blend (70% Lyocell, 30% Organic Cotton, FSC-Certified)">
+                <div class="product-img">
+                    <span class="product-badge"></span>
+                    <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400&q=80" alt="Linen Shirt" loading="lazy">
+                    <div class="product-actions">
+                        <button class="product-btn" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
+                        <button class="product-btn" aria-label="Quick view"><i class="far fa-eye"></i></button>
+                    </div>
+                    <button class="product-add">Quick Add <i class="fas fa-plus"></i></button>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Tops</span>
+                    <h3 class="product-name">Relaxed Lyocell Shirt</h3>
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        <span>(145)</span>
+                    </div>
+                    <span class="product-price">$109.00</span>
+                    <span class="product-material"></span>
+                </div>
+            </div>
+        </div>
+        <div class="section-footer" data-anim="fade-up">
+            <a href="#collections" class="btn btn-primary">View All Products <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </section>
+
+    <!-- ========== ABOUT / BRAND STORY ========== -->
+    <section id="about">
+        <div class="about-container">
+            <div class="about-image" data-anim="fade-right">
+                <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=700&q=80" alt="VELURA Studio" loading="lazy">
+                <div class="about-image-badge">
+                    <span class="badge-number"><i class="fas fa-leaf"></i> Since 2014</span>
+                </div>
+            </div>
+            <div class="about-content" data-anim="fade-left">
+                <span class="section-tag">Our Story</span>
+                <h2 class="section-title">Crafted for Those Who <span class="accent">Refuse Ordinary</span></h2>
+                <p><strong>VELURA was founded in 2014 with a singular vision:</strong> to create clothing that bridges the gap between timeless elegance and modern sensibility. What began as a small atelier in Milan has grown into a global brand worn by those who value substance over trends.</p>
+                <p>Every piece in our collection begins with fabric. Our team travels to the finest mills across Italy, Japan, and France — hand-selecting Italian Merino Wool, Japanese Selvedge Denim, Mongolian Cashmere, and Mulberry Silk. We believe that exceptional clothing starts with exceptional materials.</p>
+                <p>Our commitment extends beyond aesthetics. We partner with ethical manufacturers who share our values — fair labour, sustainable practices, and zero-waste production. From GOTS-certified organic cottons to FSC-certified TENCEL™ Lyocell, every choice we make is intentional.</p>
+                <div class="about-features">
+                    <div class="about-feature">
+                        <i class="fas fa-globe-europe"></i>
+                        <div>
+                            <h4>Italian &amp; Japanese Materials</h4>
+                            <p>Fabrics sourced from the world's finest mills</p>
+                        </div>
+                    </div>
+                    <div class="about-feature">
+                        <i class="fas fa-hand-sparkles"></i>
+                        <div>
+                            <h4>Artisan Craftsmanship</h4>
+                            <p>Garments made with care by skilled hands</p>
+                        </div>
+                    </div>
+                    <div class="about-feature">
+                        <i class="fas fa-recycle"></i>
+                        <div>
+                            <h4>Sustainable Practices</h4>
+                            <p>Ethical production, recycled packaging, low waste</p>
+                        </div>
+                    </div>
+                    <div class="about-feature">
+                        <i class="fas fa-truck"></i>
+                        <div>
+                            <h4>Free Shipping Over $200</h4>
+                            <p>Complimentary global delivery on every order</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="demo-notice">
+                    <i class="fas fa-flask"></i>
+                    <div>
+                        <strong>Demo Website</strong>
+                        <p>This is a demonstration showcase created to present web development and design capabilities. VELURA is not an official commercial brand or store. All products, descriptions, reviews, and imagery are for illustrative purposes only. No real transactions occur on this site.</p>
+                    </div>
+                </div>
+                <p class="image-notice"><i class="fas fa-info-circle"></i> <strong>Image Notice:</strong> All photographs are sourced from Unsplash (free license) or AI-generated. Used for demonstration only.</p>
+                <a href="#collections" class="btn btn-primary">Explore Collections <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== BRAND QUALITY ========== -->
+    <section id="quality">
+        <div class="section-header" data-anim="fade-up">
+            <span class="section-tag">Why VELURA</span>
+            <h2 class="section-title">Crafted for <span class="accent">Excellence</span></h2>
+            <p class="section-desc">Every detail matters — from the thread we choose to the way our site performs.</p>
+        </div>
+        <div class="quality-grid">
+            <div class="quality-card quality-card-img" data-anim="fade-up" style="--card-img: url('https://images.unsplash.com/photo-1607345360088-b8d8d5d5b5c0?w=600&q=80');">
+                <div class="quality-card-bg"></div>
+                <div class="quality-card-content">
+                    <div class="quality-icon">
+                        <i class="fas fa-tshirt"></i>
+                    </div>
+                    <h3>Premium Materials</h3>
+                    <p>Sourced from the finest mills across Italy, Japan, and France — each fabric is selected for its handfeel, durability, and character.</p>
+                    <span class="quality-card-link">Explore Fabrics <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </div>
+            <div class="quality-card quality-card-img" data-anim="fade-up" style="--card-img: url('https://images.unsplash.com/photo-1602872030217-128e4551db85?w=600&q=80');">
+                <div class="quality-card-bg"></div>
+                <div class="quality-card-content">
+                    <div class="quality-icon">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <h3>Ethical Craftsmanship</h3>
+                    <p>Partnered with responsible manufacturers who share our commitment to fair labour, sustainable practices, and zero-waste production.</p>
+                    <span class="quality-card-link">Our Promise <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </div>
+            <div class="quality-card quality-card-img" data-anim="fade-up" style="--card-img: url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80');">
+                <div class="quality-card-bg"></div>
+                <div class="quality-card-content">
+                    <div class="quality-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>Sustainable Future</h3>
+                    <p>From recycled polyesters to GOTS-certified organic cottons and FSC-certified TENCEL™ Lyocell — we're reducing our footprint with every collection.</p>
+                    <span class="quality-card-link">Our Impact <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </div>
+            <div class="quality-card quality-card-img" data-anim="fade-up" style="--card-img: url('https://images.unsplash.com/photo-1617127365659-c47d8649ef3b?w=600&q=80');">
+                <div class="quality-card-bg"></div>
+                <div class="quality-card-content">
+                    <div class="quality-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>Timeless Design</h3>
+                    <p>We don't follow trends. Each piece is designed to transcend seasons — a considered silhouette, a refined proportion, a lasting staple in your wardrobe.</p>
+                    <span class="quality-card-link">View Gallery <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </div>
+            <div class="quality-card quality-card-img" data-anim="fade-up" style="--card-img: url('https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=600&q=80');">
+                <div class="quality-card-bg"></div>
+                <div class="quality-card-content">
+                    <div class="quality-icon">
+                        <i class="fas fa-shipping-fast"></i>
+                    </div>
+                    <h3>Global Delivery</h3>
+                    <p>Complimentary shipping on all orders over $200. Carefully packaged in recyclable materials and delivered to your door within 3–5 business days.</p>
+                    <span class="quality-card-link">Shipping Info <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </div>
+            <div class="quality-card quality-card-img" data-anim="fade-up" style="--card-img: url('https://images.unsplash.com/photo-1601742125873-9b0f9edb2efd?w=600&q=80');">
+                <div class="quality-card-bg"></div>
+                <div class="quality-card-content">
+                    <div class="quality-icon">
+                        <i class="fas fa-undo-alt"></i>
+                    </div>
+                    <h3>Easy Returns</h3>
+                    <p>Not quite right? Free returns within 30 days. We'll arrange pickup from your home — no labels, no hassle, no questions asked.</p>
+                    <span class="quality-card-link">Return Policy <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- ========== CART DRAWER ========== -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-drawer" id="cartDrawer">
+        <div class="cart-header">
+            <h3>Shopping Bag <span class="cart-header-count" id="cartHeaderCount">(0)</span></h3>
+            <button class="cart-close" id="cartClose" aria-label="Close cart"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div class="cart-empty">
+                <i class="fas fa-shopping-bag"></i>
+                <p>Your bag is empty</p>
+                <span>Explore our collection and add items you love.</span>
+            </div>
+        </div>
+        <div class="cart-footer" id="cartFooter">
+            <div class="cart-total-row">
+                <span>Subtotal</span>
+                <span class="cart-total" id="cartTotal">$0.00</span>
+            </div>
+            <p class="cart-shipping-note">Complimentary shipping on orders over $200</p>
+            <button class="btn btn-primary cart-checkout">Checkout <i class="fas fa-arrow-right"></i></button>
+        </div>
+    </div>
+
+    <!-- ========== CHECKOUT MODAL ========== -->
+    <div class="checkout-overlay" id="checkoutOverlay"></div>
+    <div class="checkout-modal" id="checkoutModal">
+        <div class="checkout-header">
+            <h3>Checkout</h3>
+            <button class="checkout-close" id="checkoutClose" aria-label="Close checkout"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="checkout-steps">
+            <div class="checkout-step active" data-step="1">
+                <span class="step-number">1</span>
+                <span class="step-label">Shipping</span>
+            </div>
+            <div class="checkout-step-divider"></div>
+            <div class="checkout-step" data-step="2">
+                <span class="step-number">2</span>
+                <span class="step-label">Payment</span>
+            </div>
+            <div class="checkout-step-divider"></div>
+            <div class="checkout-step" data-step="3">
+                <span class="step-number">3</span>
+                <span class="step-label">Review</span>
+            </div>
+        </div>
+        <div class="checkout-body" id="checkoutBody">
+            <!-- Step 1: Shipping -->
+            <div class="checkout-panel active" id="checkoutStep1">
+                <form id="shippingForm">
+                    <div class="checkout-field-row">
+                        <div class="checkout-field">
+                            <label>First Name</label>
+                            <input type="text" name="firstName" required placeholder="John">
+                        </div>
+                        <div class="checkout-field">
+                            <label>Last Name</label>
+                            <input type="text" name="lastName" required placeholder="Doe">
+                        </div>
+                    </div>
+                    <div class="checkout-field">
+                        <label>Email Address</label>
+                        <input type="email" name="email" required placeholder="john@example.com">
+                    </div>
+                    <div class="checkout-field">
+                        <label>Street Address</label>
+                        <input type="text" name="address" required placeholder="123 Main Street">
+                    </div>
+                    <div class="checkout-field-row">
+                        <div class="checkout-field">
+                            <label>City</label>
+                            <input type="text" name="city" required placeholder="New York">
+                        </div>
+                        <div class="checkout-field">
+                            <label>Postal Code</label>
+                            <input type="text" name="zip" required placeholder="10001">
+                        </div>
+                    </div>
+                    <div class="checkout-field">
+                        <label>Country</label>
+                        <select name="country" required>
+                            <option value="US">United States</option>
+                            <option value="CA">Canada</option>
+                            <option value="UK">United Kingdom</option>
+                            <option value="AU">Australia</option>
+                            <option value="DE">Germany</option>
+                            <option value="FR">France</option>
+                            <option value="IT">Italy</option>
+                            <option value="JP">Japan</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 2: Payment -->
+            <div class="checkout-panel" id="checkoutStep2">
+                <form id="paymentForm">
+                    <div class="checkout-field">
+                        <label>Card Number</label>
+                        <input type="text" name="cardNumber" required placeholder="4242 4242 4242 4242" maxlength="19">
+                    </div>
+                    <div class="checkout-field-row">
+                        <div class="checkout-field">
+                            <label>Expiry Date</label>
+                            <input type="text" name="expiry" required placeholder="MM/YY" maxlength="5">
+                        </div>
+                        <div class="checkout-field">
+                            <label>CVC</label>
+                            <input type="text" name="cvc" required placeholder="123" maxlength="4">
+                        </div>
+                    </div>
+                    <div class="checkout-field">
+                        <label>Name on Card</label>
+                        <input type="text" name="cardName" required placeholder="John Doe">
+                    </div>
+                    <div class="checkout-field">
+                        <label>Billing Address</label>
+                        <input type="text" name="billingAddress" required placeholder="123 Main Street">
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 3: Review -->
+            <div class="checkout-panel" id="checkoutStep3">
+                <div class="checkout-review">
+                    <div class="checkout-review-section">
+                        <h4>Shipping To</h4>
+                        <p id="reviewShipping">—</p>
+                    </div>
+                    <div class="checkout-review-section">
+                        <h4>Payment</h4>
+                        <p id="reviewPayment">—</p>
+                    </div>
+                    <div class="checkout-review-section">
+                        <h4>Items</h4>
+                        <div id="reviewItems"></div>
+                    </div>
+                    <div class="checkout-review-total">
+                        <span>Total</span>
+                        <span id="reviewTotal">$0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success state -->
+            <div class="checkout-panel" id="checkoutSuccess">
+                <div class="checkout-success-content">
+                    <div class="checkout-success-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3>Order Confirmed!</h3>
+                    <p>Thank you for your purchase. Your order has been received and is being processed.</p>
+                    <div class="checkout-success-details">
+                        <span><strong>Order #:</strong> VEL-${String(Math.floor(Math.random() * 100000)).padStart(5, '0')}</span>
+                        <span><strong>Confirmation:</strong> Sent to your email</span>
+                    </div>
+                    <button class="btn btn-primary" id="checkoutContinueShop">Continue Shopping <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="checkout-footer" id="checkoutFooter">
+            <button class="btn btn-outline checkout-back" id="checkoutBack" style="display:none;"><i class="fas fa-arrow-left"></i> Back</button>
+            <div class="checkout-footer-right">
+                <span class="checkout-footer-total" id="checkoutFooterTotal"></span>
+                <button class="btn btn-primary checkout-next" id="checkoutNext">Continue <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== FOOTER / CONTACT ========== -->
+    <footer id="contact">
+        <div class="footer-contact-header" data-anim="fade-up">
+            <span class="section-tag">Get in Touch</span>
+            <h2 class="section-title">We'd Love to <span class="accent">Hear From You</span></h2>
+            <p>Have a question, feedback, or just want to say hello? Reach out — we're always here to help.</p>
+        </div>
+        <div class="footer-contact-details">
+            <div class="footer-contact-card">
+                <div class="footer-contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                <h4>Visit Us</h4>
+                <p>Via Manzoni 44<br>20121 Milan, Italy</p>
+            </div>
+            <div class="footer-contact-card">
+                <div class="footer-contact-icon"><i class="fas fa-phone-alt"></i></div>
+                <h4>Call Us</h4>
+                <p><a href="tel:+39021234567" class="footer-contact-link">+39 02 1234 567</a></p>
+                <span class="footer-contact-hours">Mon–Fri, 9:00–18:00 CET</span>
+            </div>
+            <div class="footer-contact-card">
+                <div class="footer-contact-icon"><i class="fas fa-envelope"></i></div>
+                <h4>Email Us</h4>
+                <p><a href="mailto:hello@velura.com" class="footer-contact-link">hello@velura.com</a></p>
+                <span class="footer-contact-hours">We reply within 24 hours</span>
+            </div>
+            <div class="footer-contact-card">
+                <div class="footer-contact-icon"><i class="fas fa-comments"></i></div>
+                <h4>Live Chat</h4>
+                <p>Chat with our team</p>
+                <span class="footer-contact-hours">Available during business hours</span>
+            </div>
+        </div>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>VELURA <span class="footer-badge">Demo</span></h3>
+                <p>Premium clothing for those who value timeless design and exceptional craftsmanship. Every piece is thoughtfully made using the finest materials from around the world.</p>
+                <div class="footer-social">
+                    <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Pinterest"><i class="fab fa-pinterest-p"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <a href="#about">About Us</a>
+                <a href="#quality">Why VELURA</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="footer-links">
+                <h4>Shop</h4>
+                <a href="#products">New Arrivals</a>
+                <a href="#collections">Collections</a>
+                <a href="#products">Best Sellers</a>
+            </div>
+            <div class="footer-links">
+                <h4>Support</h4>
+                <a href="#about">Shipping &amp; Returns</a>
+                <a href="#about">Size Guide</a>
+                <a href="#about">FAQ</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 VELURA. All rights reserved. Made with care in Milan.</p>
+            <div class="footer-payment">
+                <i class="fab fa-cc-visa"></i>
+                <i class="fab fa-cc-mastercard"></i>
+                <i class="fab fa-cc-amex"></i>
+                <i class="fab fa-cc-paypal"></i>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========== SEARCH OVERLAY ========== -->
+    <div class="search-overlay" id="searchOverlay">
+        <div class="search-modal">
+            <div class="search-header">
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search search-input-icon"></i>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search products, collections, topics..." autocomplete="off" autocorrect="off" spellcheck="false" aria-label="Search products and pages">
+                    <button class="search-input-clear" id="searchClear" aria-label="Clear search"><i class="fas fa-times"></i></button>
+                </div>
+                <button class="search-close" id="searchClose" aria-label="Close search"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="search-hints" id="searchHints">
+                <span><kbd>↑</kbd><kbd>↓</kbd> Navigate</span>
+                <span><kbd>↵</kbd> Go to section</span>
+                <span><kbd>Esc</kbd> Close</span>
+            </div>
+            <div class="search-results" id="searchResults">
+                <div class="search-empty" id="searchEmpty">
+                    <i class="fas fa-search"></i>
+                    <p>Type to search products, collections, and more</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== BACK TO TOP ========== -->
+    <button id="backToTop" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+
+
+    <script src="assets/script.js" defer></script>
+</body>
+</html>
