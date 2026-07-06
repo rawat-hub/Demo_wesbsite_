@@ -34,15 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fallback: hide loader after 3 seconds max and show content regardless
     setTimeout(hideLoader, 3000);
 
-    // Final safety net: make all content visible after 5 seconds no matter what
-    setTimeout(() => {
-        document.querySelectorAll('[data-anim]').forEach(el => {
-            el.style.opacity = '1';
-            el.style.transform = 'none';
-        });
-        document.documentElement.classList.remove('has-js');
-    }, 5000);
-
 
     /* ==========================================
        RANDOM STATS — Randomize hero counter values
