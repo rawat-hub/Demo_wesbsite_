@@ -2777,12 +2777,12 @@ footer {
    (GSAP will handle the actual animation)
    ============================================ */
 [data-anim] {
-    /* Content is visible by default. Only hidden when JS is confirmed active. */
     opacity: 1;
 }
 
+/* Clear out the blocking rule that was freezing cards invisible */
 html.has-js [data-anim] {
-    opacity: 0;
+    opacity: 1; 
 }
 
 /* ============================================

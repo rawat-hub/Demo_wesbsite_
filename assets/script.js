@@ -257,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
        ========================================== */
     let gsapSuccessfullyInitialized = false;
 
-    // Wait for GSAP to load
+    // Wait for GSAP to load safely
     function initGSAP() {
         if (typeof gsap === 'undefined') {
             setTimeout(initGSAP, 200);
@@ -269,47 +269,50 @@ document.addEventListener('DOMContentLoaded', () => {
             gsap.registerPlugin(ScrollTrigger);
         }
 
-        // Set initialization flag to prevent fallback interference
+        // Set initialization flag
         gsapSuccessfullyInitialized = true;
 
-        // ---- CRITICAL FIX: Remove has-js BEFORE any gsap.from() tweens are created. ----
+        // Clean up fallback classes safely
         document.documentElement.classList.remove('has-js');
 
         // ---- Hero Section Entrance ----
-        const heroTl = gsap.timeline({ delay: 0.8 });
+        const heroTl = gsap.timeline({ delay: 0.4 });
+
+        // Instantly prepare initial invisible states via GSAP instead of CSS classes
+        gsap.set(['.hero-subtitle', '.text-line', '.hero-desc', '.hero-buttons .btn', '.hero-stats .stat'], { opacity: 0 });
 
         heroTl
-            .from('.hero-subtitle', {
-                y: 40,
-                opacity: 0,
+            .to('.hero-subtitle', {
+                y: 0,
+                opacity: 1,
                 duration: 1,
                 ease: 'power3.out'
             })
-            .from('.text-line', {
-                y: 60,
-                opacity: 0,
+            .to('.text-line', {
+                y: 0,
+                opacity: 1,
                 duration: 1,
                 stagger: 0.2,
                 ease: 'power3.out'
             }, '-=0.5')
-            .from('.hero-desc', {
-                y: 30,
-                opacity: 0,
+            .to('.hero-desc', {
+                y: 0,
+                opacity: 1,
                 duration: 0.8,
                 ease: 'power3.out'
             }, '-=0.5')
-            .from('.hero-buttons .btn', {
-                y: 30,
-                opacity: 0,
+            .to('.hero-buttons .btn', {
+                y: 0,
+                opacity: 1,
                 duration: 0.8,
-                stagger: 0.2,
+                stagger: 0.1,
                 ease: 'back.out(1.7)'
             }, '-=0.4')
-            .from('.hero-stats .stat', {
-                y: 30,
-                opacity: 0,
+            .to('.hero-stats .stat', {
+                y: 0,
+                opacity: 1,
                 duration: 0.8,
-                stagger: 0.15,
+                stagger: 0.1,
                 ease: 'power3.out'
             }, '-=0.3');
 
@@ -327,7 +330,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Hero content parallax fade
             gsap.to('.hero-content', {
                 y: 80,
                 opacity: 0.3,
@@ -337,18 +339,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     start: 'top+=150 top',
                     end: 'bottom top',
                     scrub: true
-                }
-            });
-
-            // Scroll indicator fade on scroll
-            gsap.to('.scroll-indicator', {
-                opacity: 0,
-                ease: 'none',
-                scrollTrigger: {
-                    trigger: '#hero',
-                    start: 'top -20%',
-                    end: 'top -60%',
-                    scrub: 1
                 }
             });
         }
@@ -361,23 +351,23 @@ document.addEventListener('DOMContentLoaded', () => {
             if (el.matches('.collection-card, .product-card, .quality-card')) return;
 
             const animType = el.dataset.anim;
-            let vars = {
-                opacity: 0,
-                ease: 'power3.out',
-                duration: 1
-            };
+            let startVars = { opacity: 0 };
+            let endVars = { opacity: 1, duration: 1, ease: 'power3.out' };
 
             switch (animType) {
-                case 'fade-up': vars.y = 50; break;
-                case 'fade-down': vars.y = -50; break;
-                case 'fade-left': vars.x = -80; break;
-                case 'fade-right': vars.x = 80; break;
-                default: vars.y = 50;
+                case 'fade-up': startVars.y = 50; endVars.y = 0; break;
+                case 'fade-down': startVars.y = -50; endVars.y = 0; break;
+                case 'fade-left': startVars.x = -80; endVars.x = 0; break;
+                case 'fade-right': startVars.x = 80; endVars.x = 0; break;
+                default: startVars.y = 50;
             }
 
+            // Apply starting state via GSAP safely
+            gsap.set(el, startVars);
+
             if (typeof ScrollTrigger !== 'undefined') {
-                gsap.from(el, {
-                    ...vars,
+                gsap.to(el, {
+                    ...endVars,
                     scrollTrigger: {
                         trigger: el,
                         start: 'top 85%',
@@ -385,21 +375,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
             } else {
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            gsap.to(el, { opacity: 1, y: 0, x: 0, duration: 1, ease: 'power3.out' });
-                            observer.unobserve(el);
-                        }
-                    });
-                }, { threshold: 0.15 });
-                observer.observe(el);
+                el.style.opacity = '1'; // CSS Fallback if framework breaks down
             }
         });
 
         // ---- Counter Animation ----
         const statNumbers = document.querySelectorAll('.stat-number');
-
         statNumbers.forEach(stat => {
             const target = parseInt(stat.dataset.count) || 0;
 
@@ -410,15 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     onEnter: () => animateCounter(stat, target)
                 });
             } else {
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            animateCounter(stat, target);
-                            observer.unobserve(stat);
-                        }
-                    });
-                }, { threshold: 0.5 });
-                observer.observe(stat);
+                stat.textContent = target;
             }
         });
 
@@ -430,24 +403,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 const elapsed = currentTime - startTime;
                 const progress = Math.min(elapsed / duration, 1);
                 const eased = 1 - Math.pow(1 - progress, 3);
-                const current = Math.floor(eased * target);
-                element.textContent = current;
+                element.textContent = Math.floor(eased * target);
 
-                if (progress < 1) {
-                    requestAnimationFrame(update);
-                } else {
-                    element.textContent = target;
-                }
+                if (progress < 1) requestAnimationFrame(update);
+                else element.textContent = target;
             }
-
             requestAnimationFrame(update);
         }
 
-        // ---- Collection Cards Stagger ----
+        // ---- Cards Stagger Sections ----
         if (typeof ScrollTrigger !== 'undefined') {
-            gsap.from('.collection-card', {
-                y: 60,
-                opacity: 0,
+            // Set initial hidden states via GSAP safely right before creating animation triggers
+            gsap.set(['.collection-card', '.product-card', '.quality-card'], { opacity: 0, y: 40 });
+
+            gsap.to('.collection-card', {
+                y: 0,
+                opacity: 1,
                 duration: 0.8,
                 stagger: 0.15,
                 ease: 'power3.out',
@@ -458,10 +429,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Product cards stagger
-            gsap.from('.product-card', {
-                y: 50,
-                opacity: 0,
+            gsap.to('.product-card', {
+                y: 0,
+                opacity: 1,
                 duration: 0.7,
                 stagger: 0.08,
                 ease: 'power3.out',
@@ -471,71 +441,58 @@ document.addEventListener('DOMContentLoaded', () => {
                     toggleActions: 'play none none reverse'
                 }
             });
-        }
 
-        // ---- About Image Reveal ----
-        if (typeof ScrollTrigger !== 'undefined') {
-            gsap.from('.about-image img', {
-                scale: 0.95,
-                opacity: 0,
-                duration: 1.2,
+            gsap.to('.quality-card', {
+                y: 0,
+                opacity: 1,
+                duration: 0.7,
+                stagger: 0.1,
                 ease: 'power3.out',
                 scrollTrigger: {
-                    trigger: '.about-image',
+                    trigger: '.quality-grid',
                     start: 'top 80%',
                     toggleActions: 'play none none reverse'
                 }
             });
+        } else {
+            // Ensure cards display normally if ScrollTrigger fails entirely
+            document.querySelectorAll('.collection-card, .product-card, .quality-card').forEach(c => c.style.opacity = '1');
+        }
 
-            gsap.from('.about-image-badge', {
-                y: 30,
-                opacity: 0,
+        // ---- About Image Reveal ----
+        if (typeof ScrollTrigger !== 'undefined') {
+            gsap.set(['.about-image img', '.about-image-badge'], { opacity: 0 });
+            
+            gsap.to('.about-image img', {
+                scale: 1,
+                opacity: 1,
+                duration: 1.2,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: '.about-image',
+                    start: 'top 80%'
+                }
+            });
+
+            gsap.to('.about-image-badge', {
+                y: 0,
+                opacity: 1,
                 duration: 0.8,
                 delay: 0.3,
                 ease: 'back.out(1.7)',
                 scrollTrigger: {
                     trigger: '.about-image',
-                    start: 'top 75%',
-                    toggleActions: 'play none none reverse'
+                    start: 'top 75%'
                 }
             });
         }
 
-        // ---- Quality Cards Stagger ----
         if (typeof ScrollTrigger !== 'undefined') {
-            const qualitySection = document.querySelector('.quality-grid');
-            if (qualitySection) {
-                gsap.from('.quality-card', {
-                    y: 40,
-                    opacity: 0,
-                    duration: 0.7,
-                    stagger: 0.1,
-                    ease: 'power3.out',
-                    scrollTrigger: {
-                        trigger: '.quality-grid',
-                        start: 'top 80%',
-                        toggleActions: 'play none none reverse'
-                    }
-                });
-            }
-        }
-
-        // ---- Refresh ScrollTrigger after all images load ----
-        if (typeof ScrollTrigger !== 'undefined') {
-            const refreshScrollTrigger = () => {
-                requestAnimationFrame(() => {
-                    ScrollTrigger.refresh();
-                });
-            };
-            if (document.readyState === 'complete') {
-                refreshScrollTrigger();
-            } else {
-                window.addEventListener('load', refreshScrollTrigger);
-            }
+            ScrollTrigger.refresh();
         }
     }
 
-    // Initialize GSAP animations
+    // Run animation engine safely
     initGSAP();
 
 
