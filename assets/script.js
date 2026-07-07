@@ -62,11 +62,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const demoBannerClose = document.getElementById('demoBannerClose');
 
     if (demoBannerClose && demoBanner) {
+        // Check if banner was previously dismissed (persisted across sessions)
+        if (localStorage.getItem('velura-demo-banner-dismissed') === 'true') {
+            demoBanner.classList.add('hidden-banner');
+            document.getElementById('navbar').style.top = '0';
+        }
+
         // Set initial navbar position based on banner visibility
         const setNavTop = (isMobile) => {
             document.getElementById('navbar').style.top = isMobile ? '48px' : '52px';
         };
-        setNavTop(window.innerWidth <= 768);
+
+        if (!demoBanner.classList.contains('hidden-banner')) {
+            setNavTop(window.innerWidth <= 768);
+        }
 
         // Adjust on resize
         window.addEventListener('resize', () => {
@@ -258,6 +267,15 @@ document.addEventListener('DOMContentLoaded', () => {
             gsap.registerPlugin(ScrollTrigger);
         }
 
+        // ---- CRITICAL FIX: Remove has-js BEFORE any gsap.from() tweens are created. ----
+        // The CSS rule "html.has-js [data-anim] { opacity: 0 }" would cause gsap.from()
+        // to record opacity: 0 as the END target value, making elements stay invisible
+        // when the animation plays. By removing has-js first, GSAP records the correct
+        // end value (opacity: 1 from the non-has-js CSS rule). gsap.from()'s default
+        // immediateRender:true then sets inline opacity: 0 to hide elements until the
+        // animation plays — no manual gsap.set() needed.
+        document.documentElement.classList.remove('has-js');
+
         // ---- Hero Section Entrance ----
         const heroTl = gsap.timeline({ delay: 0.8 });
 
@@ -310,16 +328,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Hero content parallax fade
+            // Hero content parallax fade — delayed so it doesn't compete with the entrance timeline
             gsap.to('.hero-content', {
                 y: 80,
                 opacity: 0.3,
                 ease: 'none',
                 scrollTrigger: {
                     trigger: '#hero',
-                    start: 'top top',
+                    start: 'top+=150 top',
                     end: 'bottom top',
-                    scrub: 1
+                    scrub: true
                 }
             });
 
@@ -340,6 +358,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const animElements = document.querySelectorAll('[data-anim]');
 
         animElements.forEach(el => {
+            // Skip hero section elements — they are already animated by the entrance timeline above
+            if (el.closest('#hero')) return;
+
+            // Skip cards that have dedicated stagger animations — prevents double animation conflict
+            if (el.matches('.collection-card, .product-card, .quality-card')) return;
+
             const animType = el.dataset.anim;
             let vars = {
                 opacity: 0,
@@ -514,12 +538,27 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // ---- REVEAL CONTENT UNDER GSAP CONTROL ----
-        // Remove has-js AFTER all GSAP animations are configured.
-        // By this point gsap.from() has already set inline opacity: 0 on animated
-        // elements, so CSS no longer needs to hide them. Elements stay hidden via
-        // GSAP's inline styles until their ScrollTrigger/hero timeline plays.
-        document.documentElement.classList.remove('has-js');
+        // ---- Refresh ScrollTrigger after all images load ----
+        // Images can shift element positions/dimensions, which affects ScrollTrigger's
+        // scroll-position calculations. Refreshing after images are fully loaded ensures
+        // trigger positions are accurate. Handles both normal case (load event pending)
+        // and edge case where images already loaded during GSAP retry delay.
+        if (typeof ScrollTrigger !== 'undefined') {
+            const refreshScrollTrigger = () => {
+                // requestAnimationFrame lets the browser finish any pending layout work
+                requestAnimationFrame(() => {
+                    ScrollTrigger.refresh();
+                });
+            };
+            if (document.readyState === 'complete') {
+                // Images already loaded (e.g., GSAP loaded after a retry delay)
+                refreshScrollTrigger();
+            } else {
+                // Normal case: wait for all resources to finish loading
+                window.addEventListener('load', refreshScrollTrigger);
+            }
+        }
+
     }
 
     // Initialize GSAP animations
@@ -622,49 +661,59 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    /* ==========================================
-       PARALLAX ON SCROLL (Non-GSAP fallback)
-       Only applies to the about image to avoid CSS hover conflicts
-       ========================================== */
-    function parallaxElements() {
-        const parallaxItems = document.querySelectorAll('.about-image img');
-
-        parallaxItems.forEach(item => {
-            const rect = item.getBoundingClientRect();
-            const speed = 0.04;
-
-            if (rect.top < window.innerHeight && rect.bottom > 0) {
-                const yPos = (rect.top - window.innerHeight / 2) * speed;
-                item.style.transform = `translateY(${yPos}px)`;
-            }
-        });
-    }
-
-    window.addEventListener('scroll', parallaxElements, { passive: true });
+    // Note: About image parallax is handled by GSAP's ScrollTrigger above
+    // (gsap.from('.about-image img') with scroll-triggered scale and opacity).
+    // No manual scroll listener needed — it would conflict with GSAP's transform.
 
 
     /* ==========================================
        INTERSECTION OBSERVER FOR FADE-IN FALLBACK
        ========================================== */
-    // IntersectionObserver fallback — only activate when GSAP hasn't taken over
-    // (has-js still present means initGSAP() hasn't successfully removed it yet)
-    if (document.documentElement.classList.contains('has-js')) {
-        const observerFallback = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'none';
-                    observerFallback.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('[data-anim]').forEach(el => {
-            if (getComputedStyle(el).opacity === '0') {
-                observerFallback.observe(el);
+    // IntersectionObserver fallback — ensure no [data-anim] elements remain stuck hidden
+    // if GSAP failed to animate them (e.g., ScrollTrigger not available).
+    // IMPORTANT: Skip cards that have dedicated GSAP stagger animations — the fallback's
+    // transform: 'none' would conflict with GSAP's y transform and cause flickering.
+    const observerFallback = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'none';
+                observerFallback.unobserve(entry.target);
             }
         });
-    }
+    }, { threshold: 0.1 });
+
+    // Observe non-card [data-anim] elements that are still hidden
+    document.querySelectorAll('[data-anim]').forEach(el => {
+        // Skip cards — they have dedicated stagger animations via ScrollTrigger
+        if (el.matches('.collection-card, .product-card, .quality-card')) return;
+        if (getComputedStyle(el).opacity === '0') {
+            observerFallback.observe(el);
+        }
+    });
+
+    // ----- Card-specific fallback (no transform interference) -----
+    // Only reveals cards if GSAP's ScrollTrigger hasn't animated them yet.
+    // Does NOT set transform: 'none' to avoid conflicting with GSAP's stagger y transform.
+    const cardFallback = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const opacity = parseFloat(getComputedStyle(entry.target).opacity);
+                // Only intervene if GSAP hasn't animated the card past 50% opacity
+                if (opacity < 0.5) {
+                    entry.target.style.opacity = '1';
+                }
+                cardFallback.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15 });
+
+    // Observe cards that are still at opacity 0 (GSAP hasn't animated them yet)
+    document.querySelectorAll('.collection-card, .product-card, .quality-card').forEach(card => {
+        if (getComputedStyle(card).opacity === '0') {
+            cardFallback.observe(card);
+        }
+    });
 
 
     /* ==========================================
@@ -1033,6 +1082,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Clear cart
                 cart.items = [];
                 cart.updateUI();
+                // Reset checkout button display for next re-open
+                checkoutNext.style.display = '';
+                checkoutFooterTotal.style.display = '';
                 // Scroll to top of modal
                 checkoutBody.scrollTop = 0;
             }

@@ -16,9 +16,9 @@
     <title>VELURA — Premium Clothing Brand | Timeless Fashion & Modern Design</title>
     <meta name="description" content="VELURA is a premium clothing brand offering timeless fashion pieces crafted from the finest materials. Italian Merino Wool, Mulberry Silk, and more — discover your signature style.">
     <link rel="stylesheet" href="assets/style.css">
-    <!-- GSAP for smooth animations -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+    <!-- GSAP for smooth animations (bundled locally for reliable loading on platforms like Vercel) -->
+    <script src="assets/gsap.min.js" defer></script>
+    <script src="assets/ScrollTrigger.min.js" defer></script>
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -534,8 +534,6 @@
         </div>
     </section>
 
-
-
     <!-- ========== CART DRAWER ========== -->
     <div class="cart-overlay" id="cartOverlay"></div>
     <div class="cart-drawer" id="cartDrawer">
@@ -808,8 +806,6 @@
     <button id="backToTop" aria-label="Back to top">
         <i class="fas fa-arrow-up"></i>
     </button>
-
-
 
     <script src="assets/script.js" defer></script>
 </body>
