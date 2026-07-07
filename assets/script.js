@@ -12,15 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function hideLoader() {
         loader.classList.add('hidden');
-        // Ensure all animated elements are visible (fallback if GSAP failed)
-        document.querySelectorAll('[data-anim]').forEach(el => {
-            if (getComputedStyle(el).opacity === '0') {
-                el.style.opacity = '1';
-                el.style.transform = 'none';
-            }
-        });
-        // Fallback: if GSAP never loaded, remove has-js so content stays visible
-        document.documentElement.classList.remove('has-js');
         setTimeout(() => {
             loader.style.display = 'none';
         }, 800);
@@ -31,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(hideLoader, 600);
     });
 
-    // Fallback: hide loader after 3 seconds max and show content regardless
+    // Fallback: hide loader after 3 seconds max
     setTimeout(hideLoader, 3000);
 
 
@@ -522,6 +513,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
         }
+
+        // ---- REVEAL CONTENT UNDER GSAP CONTROL ----
+        // Remove has-js AFTER all GSAP animations are configured.
+        // By this point gsap.from() has already set inline opacity: 0 on animated
+        // elements, so CSS no longer needs to hide them. Elements stay hidden via
+        // GSAP's inline styles until their ScrollTrigger/hero timeline plays.
+        document.documentElement.classList.remove('has-js');
     }
 
     // Initialize GSAP animations
@@ -648,9 +646,9 @@ document.addEventListener('DOMContentLoaded', () => {
     /* ==========================================
        INTERSECTION OBSERVER FOR FADE-IN FALLBACK
        ========================================== */
-    // IntersectionObserver fallback — only when GSAP is unavailable
-    // If GSAP is loaded, it handles all animation; no need for a competing observer
-    if (typeof gsap === 'undefined') {
+    // IntersectionObserver fallback — only activate when GSAP hasn't taken over
+    // (has-js still present means initGSAP() hasn't successfully removed it yet)
+    if (document.documentElement.classList.contains('has-js')) {
         const observerFallback = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {

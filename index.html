@@ -6,15 +6,12 @@
     <!-- Synchronous inline script: tracks JS availability BEFORE CSS loads, with a built-in safety timeout so content is never stuck hidden -->
     <script>
       document.documentElement.classList.add('has-js');
-      // Safety: make content visible even if script.js fails to load (deployment path issue, 404, etc.)
+      // Safety fallback: if GSAP or script.js fails to load, make content visible anyway.
+      // We only remove has-js — we don't force inline styles because that would
+      // conflict with GSAP's from() tweens if GSAP loads just after this timeout.
       setTimeout(function() {
         document.documentElement.classList.remove('has-js');
-        var anims = document.querySelectorAll('[data-anim]');
-        for (var i = 0; i < anims.length; i++) {
-          anims[i].style.opacity = '1';
-          anims[i].style.transform = 'none';
-        }
-      }, 5000);
+      }, 6000);
     </script>
     <title>VELURA — Premium Clothing Brand | Timeless Fashion & Modern Design</title>
     <meta name="description" content="VELURA is a premium clothing brand offering timeless fashion pieces crafted from the finest materials. Italian Merino Wool, Mulberry Silk, and more — discover your signature style.">
