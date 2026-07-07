@@ -252,9 +252,11 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('scroll', updateActiveLink, { passive: true });
 
 
-    /* ==========================================
+   /* ==========================================
        GSAP ANIMATIONS
        ========================================== */
+    let gsapSuccessfullyInitialized = false;
+
     // Wait for GSAP to load
     function initGSAP() {
         if (typeof gsap === 'undefined') {
@@ -267,13 +269,10 @@ document.addEventListener('DOMContentLoaded', () => {
             gsap.registerPlugin(ScrollTrigger);
         }
 
+        // Set initialization flag to prevent fallback interference
+        gsapSuccessfullyInitialized = true;
+
         // ---- CRITICAL FIX: Remove has-js BEFORE any gsap.from() tweens are created. ----
-        // The CSS rule "html.has-js [data-anim] { opacity: 0 }" would cause gsap.from()
-        // to record opacity: 0 as the END target value, making elements stay invisible
-        // when the animation plays. By removing has-js first, GSAP records the correct
-        // end value (opacity: 1 from the non-has-js CSS rule). gsap.from()'s default
-        // immediateRender:true then sets inline opacity: 0 to hide elements until the
-        // animation plays — no manual gsap.set() needed.
         document.documentElement.classList.remove('has-js');
 
         // ---- Hero Section Entrance ----
@@ -328,7 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Hero content parallax fade — delayed so it doesn't compete with the entrance timeline
+            // Hero content parallax fade
             gsap.to('.hero-content', {
                 y: 80,
                 opacity: 0.3,
@@ -358,10 +357,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const animElements = document.querySelectorAll('[data-anim]');
 
         animElements.forEach(el => {
-            // Skip hero section elements — they are already animated by the entrance timeline above
             if (el.closest('#hero')) return;
-
-            // Skip cards that have dedicated stagger animations — prevents double animation conflict
             if (el.matches('.collection-card, .product-card, .quality-card')) return;
 
             const animType = el.dataset.anim;
@@ -372,20 +368,11 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             switch (animType) {
-                case 'fade-up':
-                    vars.y = 50;
-                    break;
-                case 'fade-down':
-                    vars.y = -50;
-                    break;
-                case 'fade-left':
-                    vars.x = -80;
-                    break;
-                case 'fade-right':
-                    vars.x = 80;
-                    break;
-                default:
-                    vars.y = 50;
+                case 'fade-up': vars.y = 50; break;
+                case 'fade-down': vars.y = -50; break;
+                case 'fade-left': vars.x = -80; break;
+                case 'fade-right': vars.x = 80; break;
+                default: vars.y = 50;
             }
 
             if (typeof ScrollTrigger !== 'undefined') {
@@ -398,7 +385,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
             } else {
-                // Fallback: simple IntersectionObserver
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
@@ -424,7 +410,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     onEnter: () => animateCounter(stat, target)
                 });
             } else {
-                // Fallback with IntersectionObserver
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
@@ -444,7 +429,6 @@ document.addEventListener('DOMContentLoaded', () => {
             function update(currentTime) {
                 const elapsed = currentTime - startTime;
                 const progress = Math.min(elapsed / duration, 1);
-                // Ease out cubic
                 const eased = 1 - Math.pow(1 - progress, 3);
                 const current = Math.floor(eased * target);
                 element.textContent = current;
@@ -487,7 +471,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     toggleActions: 'play none none reverse'
                 }
             });
-
         }
 
         // ---- About Image Reveal ----
@@ -504,7 +487,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // About badge entrance
             gsap.from('.about-image-badge', {
                 y: 30,
                 opacity: 0,
@@ -539,26 +521,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // ---- Refresh ScrollTrigger after all images load ----
-        // Images can shift element positions/dimensions, which affects ScrollTrigger's
-        // scroll-position calculations. Refreshing after images are fully loaded ensures
-        // trigger positions are accurate. Handles both normal case (load event pending)
-        // and edge case where images already loaded during GSAP retry delay.
         if (typeof ScrollTrigger !== 'undefined') {
             const refreshScrollTrigger = () => {
-                // requestAnimationFrame lets the browser finish any pending layout work
                 requestAnimationFrame(() => {
                     ScrollTrigger.refresh();
                 });
             };
             if (document.readyState === 'complete') {
-                // Images already loaded (e.g., GSAP loaded after a retry delay)
                 refreshScrollTrigger();
             } else {
-                // Normal case: wait for all resources to finish loading
                 window.addEventListener('load', refreshScrollTrigger);
             }
         }
-
     }
 
     // Initialize GSAP animations
@@ -596,8 +570,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const collectionCards = document.querySelectorAll('.collection-card');
 
     collectionCards.forEach(card => {
-        const img = card.querySelector('.collection-img img');
-
         card.addEventListener('mousemove', (e) => {
             const rect = card.getBoundingClientRect();
             const x = e.clientX - rect.left;
@@ -617,20 +589,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     /* ==========================================
-       PRODUCT BADGES — Randomly assign Best Seller / Most Bought
-       & populate fabric material from data-material attribute
+       PRODUCT BADGES
        ========================================== */
     const productCardsForBadges = document.querySelectorAll('.product-card');
 
     productCardsForBadges.forEach(card => {
-        // Populate material text
         const materialEl = card.querySelector('.product-material');
         const materialData = card.dataset.material;
         if (materialEl && materialData) {
             materialEl.textContent = materialData;
         }
 
-        // Randomly assign badge types at page load
         const badge = card.querySelector('.product-badge');
         if (badge) {
             const types = [
@@ -661,64 +630,52 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // Note: About image parallax is handled by GSAP's ScrollTrigger above
-    // (gsap.from('.about-image img') with scroll-triggered scale and opacity).
-    // No manual scroll listener needed — it would conflict with GSAP's transform.
-
-
     /* ==========================================
-       INTERSECTION OBSERVER FOR FADE-IN FALLBACK
+       INTERSECTION OBSERVER FOR FADE-IN FALLBACK (SAFE TIMEOUT)
        ========================================== */
-    // IntersectionObserver fallback — ensure no [data-anim] elements remain stuck hidden
-    // if GSAP failed to animate them (e.g., ScrollTrigger not available).
-    // IMPORTANT: Skip cards that have dedicated GSAP stagger animations — the fallback's
-    // transform: 'none' would conflict with GSAP's y transform and cause flickering.
-    const observerFallback = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'none';
-                observerFallback.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.1 });
+    // Only run if GSAP fails or takes too long to load (safety net)
+    setTimeout(() => {
+        if (gsapSuccessfullyInitialized) return;
 
-    // Observe non-card [data-anim] elements that are still hidden
-    document.querySelectorAll('[data-anim]').forEach(el => {
-        // Skip cards — they have dedicated stagger animations via ScrollTrigger
-        if (el.matches('.collection-card, .product-card, .quality-card')) return;
-        if (getComputedStyle(el).opacity === '0') {
-            observerFallback.observe(el);
-        }
-    });
+        // Force remove has-js if GSAP failed to ensure items are visible by default
+        document.documentElement.classList.remove('has-js');
 
-    // ----- Card-specific fallback (no transform interference) -----
-    // Only reveals cards if GSAP's ScrollTrigger hasn't animated them yet.
-    // Does NOT set transform: 'none' to avoid conflicting with GSAP's stagger y transform.
-    const cardFallback = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const opacity = parseFloat(getComputedStyle(entry.target).opacity);
-                // Only intervene if GSAP hasn't animated the card past 50% opacity
-                if (opacity < 0.5) {
+        const observerFallback = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
                     entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'none';
+                    observerFallback.unobserve(entry.target);
                 }
-                cardFallback.unobserve(entry.target);
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('[data-anim]').forEach(el => {
+            if (el.matches('.collection-card, .product-card, .quality-card')) return;
+            if (getComputedStyle(el).opacity === '0') {
+                observerFallback.observe(el);
             }
         });
-    }, { threshold: 0.15 });
 
-    // Observe cards that are still at opacity 0 (GSAP hasn't animated them yet)
-    document.querySelectorAll('.collection-card, .product-card, .quality-card').forEach(card => {
-        if (getComputedStyle(card).opacity === '0') {
-            cardFallback.observe(card);
-        }
-    });
+        const cardFallback = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    cardFallback.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.collection-card, .product-card, .quality-card').forEach(card => {
+            if (getComputedStyle(card).opacity === '0') {
+                cardFallback.observe(card);
+            }
+        });
+    }, 2500);
 
 
     /* ==========================================
        SMOOTH APPEAR FOR COLLECTION OVERLAYS
-       ON NON-HOVER DEVICES (Touch)
        ========================================== */
     if ('ontouchstart' in window) {
         document.querySelectorAll('.collection-card').forEach(card => {
